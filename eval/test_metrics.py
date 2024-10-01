@@ -1,12 +1,15 @@
 import os
 import cv2
 from tqdm import tqdm
+# pip install pysodmetrics
 from metrics import MAE, Emeasure, Fmeasure, Smeasure, WeightedFmeasure
 
-preds_data_root = "../results/VSSNet_384"
+preds_data_root = "../res/PSCCANet_GAP_in_CISM"
+# preds_data_root = "/media/store/yc/projects/COD/PFNet-test/results/PFNet/CDS2K"
 
 f = open(preds_data_root+"/log.txt","a+",encoding="UTF-8")
 for _data_name in ['CHAMELEON','CAMO', 'COD10K','NC4K' ]:
+# for _data_name in ['CDS2K' ]:
 
     FM = Fmeasure()
     WFM = WeightedFmeasure()
@@ -14,7 +17,8 @@ for _data_name in ['CHAMELEON','CAMO', 'COD10K','NC4K' ]:
     EM = Emeasure()
     mae = MAE()
 
-    masks_data_root = "../../Dataset/TestDataset/" +_data_name         # 1
+    # masks_data_root = "../../Dataset/TestDataset/" +_data_name  +"/Positive"       # 1
+    masks_data_root = "../../Dataset/TestDataset/" +_data_name
 
     mask_root = os.path.join(masks_data_root, "GT")
     pred_root = os.path.join(preds_data_root,_data_name)           # 2

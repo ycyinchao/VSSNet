@@ -5,15 +5,11 @@ import os
 import argparse
 from datetime import datetime
 from data.dataloader import get_loader, test_dataset
-from models.detectors.detector_woMSA import PSCCANet_woMSA
+from models.detectors.net import VSSNet
 from utils.utils import adjust_lr
 import torch.nn.functional as F
 import logging
 import eval.metrics as metrics
-
-from models.detectors.detector import PSCCANet
-
-
 
 def load_model_state_dict(model, state_dict, print_matched=True):
     """
@@ -32,6 +28,9 @@ def load_model_state_dict(model, state_dict, print_matched=True):
 
 
 def weighted_bce_and_iou_loss(pred, mask):
+
+    # B,C,H,W = mask.size()
+    mask = F.interpolate(mask,size=(pred.size(2),pred.size(3)),mode="bilinear")
     # kernelSize3
     weit = 1 + 5 * torch.abs(F.avg_pool2d(mask, kernel_size=3, stride=1, padding=1) - mask)
 
@@ -150,6 +149,7 @@ if __name__ == '__main__':
     parser.add_argument('--optimizer', type=str, default='AdamW', help='choosing optimizer AdamW or SGD')
     parser.add_argument('--augmentation', default=False, help='choose to do random flip rotation')
     parser.add_argument('--batchsize', type=int, default=8, help='training batch size')
+    # parser.add_argument('--batchsize', type=int, default=2, help='training batch size')
     parser.add_argument('--trainsize', type=int, default=384, help='training dataset size,candidate=352,704,1056')
     parser.add_argument('--load', type=str, default=None, help='train from checkpoints')
     parser.add_argument('--decay_rate', type=float, default=0.1, help='decay rate of learning rate')
@@ -158,7 +158,7 @@ if __name__ == '__main__':
                         help='path to train dataset')
     parser.add_argument('--test_path', type=str, default='../Dataset/TestDataset',
                         help='path to testing dataset')
-    parser.add_argument('--save_path', type=str, default='./checkpoints/' + 'PSCCANet' + '/')
+    parser.add_argument('--save_path', type=str, default='./checkpoints/' + 'VSSNet_384' + '/')
     parser.add_argument('--epoch_save', type=int, default=10, help='every n epochs to save model')
     opt = parser.parse_args()
 
@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
     # ---- build models ----
     # torch.cuda.set_device(0)
-    model = PSCCANet().cuda()
+    model = VSSNet().cuda()
     if opt.load is not None:
         model_dict = torch.load(opt.load)
         print("start loading model")
@@ -192,7 +192,7 @@ if __name__ == '__main__':
     print(optimizer)
     logging.info("optimizer:" + str(optimizer))
 
-    image_root = '{}/Imgs/'.format(opt.train_path)
+    image_root = '{}/Image/'.format(opt.train_path)
     gt_root = '{}/GT/'.format(opt.train_path)
 
     train_loader = get_loader(image_root, gt_root, batchsize=opt.batchsize, trainsize=opt.trainsize,
