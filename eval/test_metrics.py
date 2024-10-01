@@ -4,7 +4,7 @@ from tqdm import tqdm
 # pip install pysodmetrics
 from metrics import MAE, Emeasure, Fmeasure, Smeasure, WeightedFmeasure
 
-preds_data_root = "../res/PSCCANet_GAP_in_CISM"
+preds_data_root = "../res/VSSNet_384"
 # preds_data_root = "/media/store/yc/projects/COD/PFNet-test/results/PFNet/CDS2K"
 
 f = open(preds_data_root+"/log.txt","a+",encoding="UTF-8")
