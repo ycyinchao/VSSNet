@@ -1,6 +1,6 @@
 # Camouflaged Object Detection via Complementary Information-Selected Network based on Visual and Semantic Separation
 
-![](./images/framework.png)
+![](./images/framework.jpg)
 
 
 
@@ -12,7 +12,11 @@
 
 # 2. Results
 
-![](./images/result1.png)
+![](./images/result.jpg)
+
+![](./images/vis1.jpg)
+
+![](./images/vis2.jpg)
 
 
 
@@ -77,7 +81,13 @@ the results of evaluation are also in [Google Drive](https://drive.google.com/fi
 Please kindly cite our paper if you find it's helpful in your work.
 
 ```
-
+@article{yin2024camouflaged,
+  title={Camouflaged Object Detection via Complementary Information-Selected Network Based on Visual and Semantic Separation},
+  author={Yin, Chao and Yang, Kequan and Li, Jide and Li, Xiaoqiang and Wu, Yifan},
+  journal={IEEE Transactions on Industrial Informatics},
+  year={2024},
+  publisher={IEEE}
+}
 ```
 
 
